@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}  
+{% load crispy_forms_tags %}
+
+
+ {% comment %} {% block script %}
+   <script src="{% static 'sales/home.js' %}" defer></script>
+
+{% endblock script %}  {% endcomment %}
+
+
+{% block title %}
+  home 
+
+{% endblock title %}
+
+{% block content %}
+
+<!-- Modal -->
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add report</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <div id="alert-box"></div>
+        <form action="" id='report-form' autocomplete="off">
+          {% csrf_token %}
+          {{report_form|crispy}}
+          <button type="submit" class="btn btn-info mt-3">save</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% if no_data %}
+<div class="alert alert-warning" role="alert">
+  {{no_data}}
+</div>
+
+{% endif %}
+
+  <form action="" method="POST" class="uniForm">
+    {% csrf_token %}
+    {% comment %} {{ form|crispy }} {% endcomment %}
+    
+    {{search_form|crispy}}
+    <button type="submit" class="btn btn-primary mt-3">Search</button>
+  </form>
+  <br />
+
+  {% if sales_df %}
+    sales_df
+    {{ sales_df|safe }}
+    <br />
+    positions_df
+    {{ positions_df|safe }}
+    <br />
+    merged_df
+    {{ merged_df|safe }}
+    groupby_df
+    {{ df|safe }}
+    <br/>
+    
+     <img src="data:image/png;base64, {{chart|safe}}" alt="Chart" id='img'>
+  
+  {% endif %}
+
+   <br/>
+  
+  <button class="btn btn-primary not-visible" id="report-btn"  type="button" data-bs-toggle="modal" data-bs-target="#reportModal">add report</button>
+  {% block script %}
+   <script src="{% static 'sales/home.js' %}" defer></script>
+   {% endblock script %} 
+ 
+{% endblock content %}
+
